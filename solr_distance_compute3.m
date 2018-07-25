@@ -8,7 +8,7 @@ samplingrate = 44100;  % sampling rate of the audio files; change it accordingly
 % if the sensors are placed in parallel, then adjustment is needed
 device1Speak2Mic = 0; % distance between the speaker and microphone of the sensor device 1 (unit: cm)
 device2Speak2Mic = 0; % distance between the speaker and microphone of the sensor device 2 (unit: cm)
-
+fpass = 17000;
 
 % probe audio file used in this experiment
 % use the correct probe sound for the collected data files
@@ -28,13 +28,13 @@ device2Speak2Mic = 0; % distance between the speaker and microphone of the senso
 %[s2,fs2] = audioread('./data/probefiles/sweep20hz20000hz3dbfsdot5s.wav');
 
 %ultrasound 1s
-%[s2,fs2] = audioread('./data/probefiles/sweep17000hz20000hz3dbfs1s.wav');
+[s2,fs2] = audioread('./data/probefiles/sweep17000hz20000hz3dbfs1s.wav');
 
 %ultrasound 0.1s
 %[s2,fs2] = audioread('./data/probefiles/sweep17000hz20000hz3dbfsdot1s.wav');
 
 %ultrasound 0.5s
-[s2,fs2] = audioread('./data/probefiles/sweep17000hz20000hz3dbfsdot5s.wav');
+%[s2,fs2] = audioread('./data/probefiles/sweep17000hz20000hz3dbfsdot5s.wav');
 
 targetsignal = (s2 - mean(s2)) / std(s2);
 
@@ -51,7 +51,9 @@ targetsignal = (s2 - mean(s2)) / std(s2);
 
 %dataFolder1 = './data/experimentdata/June22/Device1UltrasonicRange/dot1';
 
-dataFolder1 = './data/experimentdata/June22/Device1UltrasonicRange/dot5';
+%dataFolder1 = './data/experimentdata/June22/Device1UltrasonicRange/dot5';
+
+dataFolder1 = './data/experimentdata/July20/device1';
 
 
 outputfile1 = 'device1.csv';
@@ -70,7 +72,10 @@ for k = 1:N
     % process
     fullname = fullfile(dataFolder1,filename);
     [s1,fs1] = audioread(fullname);
-    signal1 = (s1 - mean(s1))/std(s1);
+    signal1Original = (s1 - mean(s1))/std(s1);
+    
+    signal1 = highpass(signal1Original,fpass,samplingrate);
+    
     
     % search the first half to find the target signal 
     lag = finddelay(targetsignal,signal1(1: length(signal1)/2));
@@ -95,8 +100,9 @@ fclose(fid);
 
 %dataFolder2 = './data/experimentdata/June22/Device1UltrasonicRange/dot1';
 
-dataFolder2 = './data/experimentdata/June22/Device1UltrasonicRange/dot5';
+%dataFolder2 = './data/experimentdata/June22/Device1UltrasonicRange/dot5';
 
+dataFolder2 = './data/experimentdata/July20/device2';
 
 outputfile2 = 'device2.csv';
 fullname2 = fullfile(dataFolder2, outputfile2);
@@ -121,7 +127,9 @@ if N == N2
         % process
         fullname = fullfile(dataFolder2,filename);
         [s1,fs1] = audioread(fullname);
-        signal1 = (s1 - mean(s1))/std(s1);
+        signal1Original = (s1 - mean(s1))/std(s1);
+        
+        signal1 = highpass(signal1Original,fpass,samplingrate);
         
         lag = finddelay(targetsignal,signal1(1:length(signal1)/2));
 
@@ -147,7 +155,9 @@ if N == N2
     
     %resultfilename = './data/experimentdata/June22/result_ultrasoundrange_dot1s.csv';
     
-    resultfilename = './data/experimentdata/June22/result_ultrasoundrange_dot5s.csv';
+    %resultfilename = './data/experimentdata/June22/result_ultrasoundrange_dot5s.csv';
+    
+    resultfilename = './data/experimentdata/July20/result_ultrasoundrange_1s.csv';
     
     fid = fopen(resultfilename,'w');
     fprintf(fid, 'index,groundtruth,distance,distanceAdjust\r\n');
