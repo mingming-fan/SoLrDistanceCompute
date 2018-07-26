@@ -1,11 +1,13 @@
 %some constants
 %use the speed of sound at the temperature and air pressure 
 %of the space where the data collection was conducted
-speedofsound = 34300; % cm/s 
-samplingrate = 44100;  % sampling rate of the audio files; change it accordingly
+speedofsound = 34300; % cm/s  % change according to the temperature and air pressure
+samplingrate = 44100;  % sampling rate of the audio files; change it according to the audio files used
 
 %%%following parameters need to be set properly
-n = 1; % change accordingly
+n = 1; % 1: ultrasonic 1s; 2: ultrasonic 0.1s, 3: ultrasonic 0.5s
+       % 4: full range 1s; 5: full range 0.1s 6: full range 0.5s
+       
 rootFolder = "./data";
 
 % change the below data folders accordingly
