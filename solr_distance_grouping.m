@@ -7,6 +7,11 @@ samplingrate = 44100;  % sampling rate of the audio files; change it accordingly
 %%%following parameters need to be set properly
 n = 1; % change accordingly
 rootFolder = "./data";
+
+% change the below data folders accordingly
+% now it has three folders representing three sensor units' data
+% place the probing files received by each sensor unit in a folder
+% create more folders if there are more than three sensor units
 dataFolders = {'./data/device1', './data/device2','./data/device3'};
 
 % number of clusters (closed and open spaces)
